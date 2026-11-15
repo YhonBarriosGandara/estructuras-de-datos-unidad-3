@@ -53,6 +53,43 @@ public class GestionRestauranteService {
         return procesado;
     }
 
+    /**
+     * Cancelar elemento pendiente.
+     * REGLA OBLIGATORIA DE LA GUIA:
+     * "Debe resolverse usando una cola auxiliar. No se permite eliminar directamente desde el centro de la cola."
+     *
+     * @param numeroPedido Identificador del pedido a cancelar.
+     * @return El pedido cancelado o null si no se encontro en la cola de pendientes.
+     */
+    public Pedido cancelarPedidoPendiente(String numeroPedido) {
+        if (numeroPedido == null || colaPendientes.esVacia()) {
+            return null;
+        }
+
+        String codigoObjetivo = numeroPedido.trim().toUpperCase();
+        Cola colaAuxiliar = new Cola();
+        Pedido cancelado = null;
+
+        // Fase 1: Desencolar todo elemento por elemento hacia la cola auxiliar
+        while (!colaPendientes.esVacia()) {
+            Pedido actual = (Pedido) colaPendientes.desencolar();
+            if (cancelado == null && actual.getNumeroPedido().equalsIgnoreCase(codigoObjetivo)) {
+                // Elemento localizado: se extrae, se cambia su estado y NO se agrega a la auxiliar
+                actual.setEstado(EstadoPedido.CANCELADO);
+                cancelado = actual;
+            } else {
+                colaAuxiliar.encolar(actual);
+            }
+        }
+
+        // Fase 2: Restaurar los elementos de la cola auxiliar de vuelta a la cola de pendientes
+        while (!colaAuxiliar.esVacia()) {
+            colaPendientes.encolar(colaAuxiliar.desencolar());
+        }
+
+        return cancelado;
+    }
+
     public Pedido buscarPedidoPorCodigo(String codigo) {
         if (codigo == null || codigo.trim().isEmpty()) return null;
         String codigoLimpio = codigo.trim().toUpperCase();
