@@ -88,12 +88,14 @@ public class GestionEncomiendasService {
     }
 
     public Encomienda buscarPorCodigo(String codigo) {
-        if (codigo == null) return null;
+        if (codigo == null)
+            return null;
         return mapaPorCodigo.get(codigo.trim());
     }
 
     public boolean existeCodigo(String codigo) {
-        if (codigo == null) return false;
+        if (codigo == null)
+            return false;
         return mapaPorCodigo.containsKey(codigo.trim());
     }
 
@@ -109,7 +111,77 @@ public class GestionEncomiendasService {
         return Collections.unmodifiableSet(catalogoOrdenadoPorPeso);
     }
 
+    public Encomienda consultarProximoDespacho() {
+        return colaPrioridad.peek();
+    }
+
+    public Encomienda despacharSiguiente() {
+        Encomienda proxima = colaPrioridad.poll();
+        if (proxima != null) {
+            proxima.setEstado(EstadoEncomienda.EN_TRANSITO);
+        }
+        return proxima;
+    }
+
+    public boolean cancelarEncomienda(String codigo) {
+        if (codigo == null)
+            return false;
+        Encomienda encomienda = mapaPorCodigo.get(codigo.trim());
+        if (encomienda == null) {
+            return false;
+        }
+
+        encomienda.setEstado(EstadoEncomienda.CANCELADA);
+        colaPrioridad.remove(encomienda);
+        catalogoOrdenadoPorPeso.remove(encomienda);
+        return true;
+    }
+
+    public boolean eliminarDefinitivamente(String codigo) {
+        if (codigo == null)
+            return false;
+        Encomienda encomienda = mapaPorCodigo.remove(codigo.trim());
+        if (encomienda == null) {
+            return false;
+        }
+
+        listaGeneral.remove(encomienda);
+        catalogoOrdenadoPorPeso.remove(encomienda);
+        colaPrioridad.remove(encomienda);
+        return true;
+    }
+
+    public boolean modificarDestino(String codigo, String nuevoDestino) {
+        if (codigo == null || nuevoDestino == null || nuevoDestino.trim().isEmpty()) {
+            return false;
+        }
+
+        Encomienda encomienda = mapaPorCodigo.get(codigo.trim());
+        if (encomienda == null) {
+            return false;
+        }
+
+        String ciudadFormateada = nuevoDestino.trim().toUpperCase();
+        encomienda.setCiudadDestino(ciudadFormateada);
+        ciudadesDestino.add(ciudadFormateada);
+        return true;
+    }
+
     public int getCantidadRegistradas() {
         return listaGeneral.size();
+    }
+
+    public int getCantidadPendientesDespacho() {
+        return colaPrioridad.size();
+    }
+
+    public Map<String, Integer> obtenerResumenColecciones() {
+        Map<String, Integer> resumen = new HashMap<>();
+        resumen.put("listaGeneral", listaGeneral.size());
+        resumen.put("mapaPorCodigo", mapaPorCodigo.size());
+        resumen.put("catalogoOrdenadoPorPeso", catalogoOrdenadoPorPeso.size());
+        resumen.put("colaPrioridad", colaPrioridad.size());
+        resumen.put("ciudadesDestino", ciudadesDestino.size());
+        return resumen;
     }
 }
