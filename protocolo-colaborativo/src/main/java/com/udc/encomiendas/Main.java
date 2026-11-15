@@ -27,6 +27,7 @@ public class Main {
                 case 3 -> buscarEncomiendaPorCodigo(scanner, service);
                 case 4 -> consultarCiudadesUnicas(service);
                 case 5 -> mostrarCatalogoOrdenadoPorPeso(service);
+                case 6 -> consultarProximoDespacho(service);
                 case 0 -> System.out.println("\nSaliendo del sistema de gestión de encomiendas...");
                 default -> System.out.println("Opción no válida. Intente nuevamente.");
             }
@@ -43,6 +44,7 @@ public class Main {
         System.out.println("3. Buscar encomienda por código (Búsqueda directa Map)");
         System.out.println("4. Consultar ciudades de destino únicas (HashSet)");
         System.out.println("5. Mostrar catálogo ordenado por peso (TreeSet)");
+        System.out.println("6. Consultar próxima encomienda a despachar (PriorityQueue peek)");
         System.out.println("0. Salir");
     }
 
@@ -153,6 +155,27 @@ public class Main {
                     e.getEstado().getDescripcion());
         }
         System.out.println("-----------------------------------------------------------------------------------------------------------------------");
+    }
+
+    private static void consultarProximoDespacho(GestionEncomiendasService service) {
+        System.out.println("\n--- PRÓXIMA ENCOMIENDA A DESPACHAR (PriorityQueue peek) ---");
+        Encomienda proxima = service.consultarProximoDespacho();
+
+        if (proxima == null) {
+            System.out.println("No hay encomiendas pendientes de despacho en la cola.");
+            return;
+        }
+
+        System.out.println(">> Encomienda en cabecera de prioridad:");
+        System.out.println("  - Código:           " + proxima.getCodigo());
+        System.out.println("  - Remitente:        " + proxima.getRemitente().getNombre() + " (Doc: " + proxima.getRemitente().getDocumento() + ")");
+        System.out.println("  - Destinatario:     " + proxima.getDestinatario().getNombre() + " (Doc: " + proxima.getDestinatario().getDocumento() + ")");
+        System.out.println("  - Ciudad Destino:   " + proxima.getCiudadDestino());
+        System.out.println("  - Peso:             " + String.format("%.2f kg", proxima.getPeso()));
+        System.out.println("  - Tipo de Servicio: " + proxima.getTipoServicio());
+        System.out.println("  - Prioridad:        " + proxima.getPrioridad().getDescripcion() + " (Nivel " + proxima.getPrioridad().getNivel() + ")");
+        System.out.println("  - Estado Actual:    " + proxima.getEstado().getDescripcion());
+        System.out.println("  - Total en cola:    " + service.getCantidadPendientesDespacho());
     }
 
     private static void registrarNuevaEncomienda(Scanner scanner, GestionEncomiendasService service) {
