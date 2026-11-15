@@ -22,6 +22,7 @@ public class Main {
 
             switch (opcion) {
                 case 1 -> registrarNuevaEncomienda(scanner, service);
+                case 2 -> consultarTodasLasEncomiendas(service);
                 case 0 -> System.out.println("\nSaliendo del sistema de gestión de encomiendas...");
                 default -> System.out.println("Opción no válida. Intente nuevamente.");
             }
@@ -34,7 +35,43 @@ public class Main {
         System.out.println("      SISTEMA LOGÍSTICO DE GESTIÓN DE ENCOMIENDAS      ");
         System.out.println("=======================================================");
         System.out.println("1. Registrar nueva encomienda");
+        System.out.println("2. Consultar todas las encomiendas (Catálogo general)");
         System.out.println("0. Salir");
+    }
+
+    private static void consultarTodasLasEncomiendas(GestionEncomiendasService service) {
+        System.out.println("\n--- CATÁLOGO GENERAL DE ENCOMIENDAS (ArrayList) ---");
+        var lista = service.getListaGeneral();
+
+        if (lista.isEmpty()) {
+            System.out.println("No hay encomiendas registradas en el sistema.");
+            return;
+        }
+
+        System.out.println("Total registradas: " + lista.size());
+        System.out.println("-----------------------------------------------------------------------------------------------------------------------");
+        System.out.printf("%-10s %-18s %-18s %-15s %-10s %-12s %-14s %-12s%n",
+                "Código", "Remitente", "Destinatario", "Destino", "Peso (kg)", "Servicio", "Prioridad", "Estado");
+        System.out.println("-----------------------------------------------------------------------------------------------------------------------");
+
+        for (Encomienda e : lista) {
+            System.out.printf("%-10s %-18s %-18s %-15s %-10.2f %-12s %-14s %-12s%n",
+                    e.getCodigo(),
+                    truncar(e.getRemitente().getNombre(), 17),
+                    truncar(e.getDestinatario().getNombre(), 17),
+                    e.getCiudadDestino(),
+                    e.getPeso(),
+                    e.getTipoServicio(),
+                    e.getPrioridad().getDescripcion(),
+                    e.getEstado().getDescripcion());
+        }
+        System.out.println("-----------------------------------------------------------------------------------------------------------------------");
+    }
+
+    private static String truncar(String texto, int longitudMaxima) {
+        if (texto == null) return "";
+        if (texto.length() <= longitudMaxima) return texto;
+        return texto.substring(0, longitudMaxima - 1) + ".";
     }
 
     private static void registrarNuevaEncomienda(Scanner scanner, GestionEncomiendasService service) {
