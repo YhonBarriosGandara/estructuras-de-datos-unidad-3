@@ -50,8 +50,10 @@ public class Cliente {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Cliente cliente = (Cliente) o;
         return Objects.equals(documento, cliente.documento);
     }
@@ -66,4 +68,3 @@ public class Cliente {
         return nombre + " (Doc: " + documento + ", Ciudad: " + ciudad + ")";
     }
 }
-

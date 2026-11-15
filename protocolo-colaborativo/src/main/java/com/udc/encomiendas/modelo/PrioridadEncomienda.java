@@ -27,4 +27,3 @@ public enum PrioridadEncomienda {
         return descripcion + " (Nivel " + nivel + ")";
     }
 }
-

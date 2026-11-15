@@ -17,8 +17,8 @@ public class Encomienda implements Comparable<Encomienda> {
     private LocalDateTime fechaRegistro;
 
     public Encomienda(String codigo, Cliente remitente, Cliente destinatario,
-                      String ciudadDestino, double peso, String tipoServicio,
-                      PrioridadEncomienda prioridad) {
+            String ciudadDestino, double peso, String tipoServicio,
+            PrioridadEncomienda prioridad) {
         this.codigo = codigo;
         this.remitente = remitente;
         this.destinatario = destinatario;
@@ -31,8 +31,8 @@ public class Encomienda implements Comparable<Encomienda> {
     }
 
     public Encomienda(String codigo, Cliente remitente, Cliente destinatario,
-                      String ciudadDestino, double peso, String tipoServicio,
-                      PrioridadEncomienda prioridad, LocalDateTime fechaRegistro) {
+            String ciudadDestino, double peso, String tipoServicio,
+            PrioridadEncomienda prioridad, LocalDateTime fechaRegistro) {
         this.codigo = codigo;
         this.remitente = remitente;
         this.destinatario = destinatario;
@@ -118,8 +118,10 @@ public class Encomienda implements Comparable<Encomienda> {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Encomienda that = (Encomienda) o;
         return Objects.equals(codigo, that.codigo);
     }
@@ -153,4 +155,3 @@ public class Encomienda implements Comparable<Encomienda> {
                 fechaRegistro.format(formato));
     }
 }
-
