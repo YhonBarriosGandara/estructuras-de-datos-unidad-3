@@ -6,6 +6,7 @@ import com.udc.encomiendas.modelo.PrioridadEncomienda;
 import com.udc.encomiendas.servicio.GestionEncomiendasService;
 
 import java.util.Scanner;
+import java.util.Set;
 
 public class Main {
 
@@ -24,6 +25,7 @@ public class Main {
                 case 1 -> registrarNuevaEncomienda(scanner, service);
                 case 2 -> consultarTodasLasEncomiendas(service);
                 case 3 -> buscarEncomiendaPorCodigo(scanner, service);
+                case 4 -> consultarCiudadesUnicas(service);
                 case 0 -> System.out.println("\nSaliendo del sistema de gestión de encomiendas...");
                 default -> System.out.println("Opción no válida. Intente nuevamente.");
             }
@@ -38,6 +40,7 @@ public class Main {
         System.out.println("1. Registrar nueva encomienda");
         System.out.println("2. Consultar todas las encomiendas (Catálogo general)");
         System.out.println("3. Buscar encomienda por código (Búsqueda directa Map)");
+        System.out.println("4. Consultar ciudades de destino únicas (HashSet)");
         System.out.println("0. Salir");
     }
 
@@ -101,6 +104,24 @@ public class Main {
         } else {
             System.out.println("\n>> [Resultado] No se encontró ninguna encomienda registrada con el código: " + codigo);
         }
+    }
+
+    private static void consultarCiudadesUnicas(GestionEncomiendasService service) {
+        System.out.println("\n--- CIUDADES DE DESTINO ÚNICAS (HashSet) ---");
+        Set<String> ciudades = service.getCiudadesDestino();
+
+        if (ciudades.isEmpty()) {
+            System.out.println("No hay ciudades de destino registradas en el sistema.");
+            return;
+        }
+
+        System.out.println("Total de destinos únicos con cobertura: " + ciudades.size());
+        System.out.println("-------------------------------------------------------");
+        int index = 1;
+        for (String ciudad : ciudades) {
+            System.out.printf("  %2d. %s%n", index++, ciudad);
+        }
+        System.out.println("-------------------------------------------------------");
     }
 
     private static void registrarNuevaEncomienda(Scanner scanner, GestionEncomiendasService service) {
