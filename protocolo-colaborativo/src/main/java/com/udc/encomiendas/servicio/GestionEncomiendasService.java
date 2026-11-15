@@ -175,6 +175,35 @@ public class GestionEncomiendasService {
         return colaPrioridad.size();
     }
 
+    public void cargarDatosIniciales() {
+        java.time.LocalDateTime base = java.time.LocalDateTime.now();
+
+        Cliente c1 = new Cliente("1047111001", "Carlos Mendoza", "3001234567", "Cartagena");
+        Cliente c2 = new Cliente("1047111002", "María Gómez", "3019876543", "Barranquilla");
+        Cliente c3 = new Cliente("1047111003", "Andrés Ruiz", "3104567890", "Medellín");
+        Cliente c4 = new Cliente("1047111004", "Laura Torres", "3156789012", "Bogotá");
+        Cliente c5 = new Cliente("1047111005", "David Meza", "3203456789", "Cali");
+        Cliente c6 = new Cliente("1047111006", "Valentina Ríos", "3008765432", "Santa Marta");
+        Cliente c7 = new Cliente("1047111007", "Jorge Castro", "3127890123", "Bucaramanga");
+        Cliente c8 = new Cliente("1047111008", "Diana Herrera", "3182345678", "Cartagena");
+
+        registrarEncomienda(new Encomienda("ENC-1001", c1, c2, "Barranquilla", 2.50, "Express", PrioridadEncomienda.URGENTE, base.minusMinutes(90)));
+        registrarEncomienda(new Encomienda("ENC-1002", c3, c4, "Bogotá", 8.20, "Estándar", PrioridadEncomienda.NORMAL, base.minusMinutes(85)));
+        registrarEncomienda(new Encomienda("ENC-1003", c5, c1, "Cartagena", 1.20, "Express", PrioridadEncomienda.ALTA, base.minusMinutes(80)));
+        registrarEncomienda(new Encomienda("ENC-1004", c2, c6, "Santa Marta", 15.00, "Carga", PrioridadEncomienda.ECONOMICA, base.minusMinutes(75)));
+        registrarEncomienda(new Encomienda("ENC-1005", c4, c3, "Medellín", 3.80, "Express", PrioridadEncomienda.URGENTE, base.minusMinutes(70)));
+        registrarEncomienda(new Encomienda("ENC-1006", c6, c5, "Cali", 5.50, "Estándar", PrioridadEncomienda.NORMAL, base.minusMinutes(65)));
+        registrarEncomienda(new Encomienda("ENC-1007", c7, c8, "Cartagena", 12.30, "Carga", PrioridadEncomienda.ALTA, base.minusMinutes(60)));
+        registrarEncomienda(new Encomienda("ENC-1008", c8, c7, "Bucaramanga", 0.80, "Documentos", PrioridadEncomienda.URGENTE, base.minusMinutes(55)));
+        registrarEncomienda(new Encomienda("ENC-1009", c1, c4, "Bogotá", 22.00, "Carga", PrioridadEncomienda.ECONOMICA, base.minusMinutes(50)));
+        registrarEncomienda(new Encomienda("ENC-1010", c3, c2, "Barranquilla", 4.10, "Estándar", PrioridadEncomienda.NORMAL, base.minusMinutes(45)));
+        registrarEncomienda(new Encomienda("ENC-1011", c5, c6, "Santa Marta", 6.70, "Express", PrioridadEncomienda.ALTA, base.minusMinutes(40)));
+        registrarEncomienda(new Encomienda("ENC-1012", c2, c7, "Bucaramanga", 1.90, "Documentos", PrioridadEncomienda.NORMAL, base.minusMinutes(35)));
+        registrarEncomienda(new Encomienda("ENC-1013", c4, c5, "Cali", 18.50, "Carga", PrioridadEncomienda.ECONOMICA, base.minusMinutes(30)));
+        registrarEncomienda(new Encomienda("ENC-1014", c6, c1, "Cartagena", 7.40, "Estándar", PrioridadEncomienda.ALTA, base.minusMinutes(25)));
+        registrarEncomienda(new Encomienda("ENC-1015", c7, c3, "Medellín", 3.20, "Express", PrioridadEncomienda.NORMAL, base.minusMinutes(20)));
+    }
+
     public Map<String, Integer> obtenerResumenColecciones() {
         Map<String, Integer> resumen = new HashMap<>();
         resumen.put("listaGeneral", listaGeneral.size());
