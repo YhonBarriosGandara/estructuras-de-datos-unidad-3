@@ -29,6 +29,7 @@ public class Main {
                 case 5 -> mostrarCatalogoOrdenadoPorPeso(service);
                 case 6 -> consultarProximoDespacho(service);
                 case 7 -> despacharSiguienteEncomienda(service);
+                case 8 -> modificarDestinoEncomienda(scanner, service);
                 case 0 -> System.out.println("\nSaliendo del sistema de gestión de encomiendas...");
                 default -> System.out.println("Opción no válida. Intente nuevamente.");
             }
@@ -47,6 +48,7 @@ public class Main {
         System.out.println("5. Mostrar catálogo ordenado por peso (TreeSet)");
         System.out.println("6. Consultar próxima encomienda a despachar (PriorityQueue peek)");
         System.out.println("7. Despachar siguiente encomienda prioritaria (PriorityQueue poll)");
+        System.out.println("8. Modificar ciudad de destino (Actualización Set)");
         System.out.println("0. Salir");
     }
 
@@ -216,6 +218,36 @@ public class Main {
                 + despachada.getPrioridad().getNivel() + ")");
         System.out.println("  - Nuevo Estado:      " + despachada.getEstado().getDescripcion());
         System.out.println("  - Restantes en cola: " + service.getCantidadPendientesDespacho());
+    }
+
+    private static void modificarDestinoEncomienda(Scanner scanner, GestionEncomiendasService service) {
+        System.out.println("\n--- MODIFICAR CIUDAD DE DESTINO ---");
+        System.out.print("Ingrese código de encomienda a modificar: ");
+        String codigo = scanner.nextLine().trim();
+
+        Encomienda encontrada = service.buscarPorCodigo(codigo);
+        if (encontrada == null) {
+            System.out.println("Error: No se encontró encomienda registrada con el código: " + codigo);
+            return;
+        }
+
+        System.out.println(">> Encomienda encontrada: " + encontrada.getCodigo());
+        System.out.println("   Destino actual: " + encontrada.getCiudadDestino());
+        System.out.print("Ingrese nueva ciudad de destino: ");
+        String nuevoDestino = scanner.nextLine().trim();
+
+        if (nuevoDestino.isEmpty()) {
+            System.out.println("Error: La nueva ciudad de destino no puede estar vacía.");
+            return;
+        }
+
+        boolean exito = service.modificarDestino(codigo, nuevoDestino);
+        if (exito) {
+            System.out.println(">> ¡Destino actualizado exitosamente a: " + encontrada.getCiudadDestino() + "!");
+            System.out.println("   (Colección HashSet de cobertura sincronizada automáticamente)");
+        } else {
+            System.out.println("Error: No se pudo actualizar el destino.");
+        }
     }
 
     private static void registrarNuevaEncomienda(Scanner scanner, GestionEncomiendasService service) {
