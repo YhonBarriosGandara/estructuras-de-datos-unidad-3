@@ -26,6 +26,7 @@ public class Main {
                 case 2 -> consultarTodasLasEncomiendas(service);
                 case 3 -> buscarEncomiendaPorCodigo(scanner, service);
                 case 4 -> consultarCiudadesUnicas(service);
+                case 5 -> mostrarCatalogoOrdenadoPorPeso(service);
                 case 0 -> System.out.println("\nSaliendo del sistema de gestión de encomiendas...");
                 default -> System.out.println("Opción no válida. Intente nuevamente.");
             }
@@ -41,6 +42,7 @@ public class Main {
         System.out.println("2. Consultar todas las encomiendas (Catálogo general)");
         System.out.println("3. Buscar encomienda por código (Búsqueda directa Map)");
         System.out.println("4. Consultar ciudades de destino únicas (HashSet)");
+        System.out.println("5. Mostrar catálogo ordenado por peso (TreeSet)");
         System.out.println("0. Salir");
     }
 
@@ -122,6 +124,35 @@ public class Main {
             System.out.printf("  %2d. %s%n", index++, ciudad);
         }
         System.out.println("-------------------------------------------------------");
+    }
+
+    private static void mostrarCatalogoOrdenadoPorPeso(GestionEncomiendasService service) {
+        System.out.println("\n--- CATÁLOGO ORDENADO POR PESO ASCENDENTE (TreeSet) ---");
+        Set<Encomienda> catalogo = service.getCatalogoOrdenadoPorPeso();
+
+        if (catalogo.isEmpty()) {
+            System.out.println("No hay encomiendas registradas en el catálogo.");
+            return;
+        }
+
+        System.out.println("Total de encomiendas ordenadas por peso: " + catalogo.size());
+        System.out.println("-----------------------------------------------------------------------------------------------------------------------");
+        System.out.printf("%-10s %-18s %-18s %-15s %-10s %-12s %-14s %-12s%n",
+                "Código", "Remitente", "Destinatario", "Destino", "Peso (kg)", "Servicio", "Prioridad", "Estado");
+        System.out.println("-----------------------------------------------------------------------------------------------------------------------");
+
+        for (Encomienda e : catalogo) {
+            System.out.printf("%-10s %-18s %-18s %-15s %-10.2f %-12s %-14s %-12s%n",
+                    e.getCodigo(),
+                    truncar(e.getRemitente().getNombre(), 17),
+                    truncar(e.getDestinatario().getNombre(), 17),
+                    e.getCiudadDestino(),
+                    e.getPeso(),
+                    e.getTipoServicio(),
+                    e.getPrioridad().getDescripcion(),
+                    e.getEstado().getDescripcion());
+        }
+        System.out.println("-----------------------------------------------------------------------------------------------------------------------");
     }
 
     private static void registrarNuevaEncomienda(Scanner scanner, GestionEncomiendasService service) {
