@@ -90,6 +90,24 @@ public class GestionRestauranteService {
         return cancelado;
     }
 
+    /**
+     * Deshacer ultimo procesamiento.
+     * REGLA OBLIGATORIA DE LA GUIA:
+     * "Al deshacer: Elemento ultimo = (Elemento) historialProcesados.desapilar(); colaPendientes.encolar(ultimo);"
+     *
+     * @return El pedido reincorporado a la cola o null si la pila esta vacia.
+     */
+    public Pedido deshacerUltimoProcesamiento() {
+        if (historialProcesados.esVacia()) {
+            return null;
+        }
+
+        Pedido ultimo = (Pedido) historialProcesados.desapilar();
+        ultimo.setEstado(EstadoPedido.PENDIENTE);
+        colaPendientes.encolar(ultimo);
+        return ultimo;
+    }
+
     public Pedido buscarPedidoPorCodigo(String codigo) {
         if (codigo == null || codigo.trim().isEmpty()) return null;
         String codigoLimpio = codigo.trim().toUpperCase();
