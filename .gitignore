@@ -1,0 +1,18 @@
+# Maven / Build
+target/
+bin/
+*.class
+
+# IDEs y Editores
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+tempCodeRunnerFile.*
+
+# Sistema Operativo
+.DS_Store
+Thumbs.db
+
