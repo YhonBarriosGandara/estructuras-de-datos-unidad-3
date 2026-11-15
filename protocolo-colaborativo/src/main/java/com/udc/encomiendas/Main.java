@@ -28,6 +28,7 @@ public class Main {
                 case 4 -> consultarCiudadesUnicas(service);
                 case 5 -> mostrarCatalogoOrdenadoPorPeso(service);
                 case 6 -> consultarProximoDespacho(service);
+                case 7 -> despacharSiguienteEncomienda(service);
                 case 0 -> System.out.println("\nSaliendo del sistema de gestión de encomiendas...");
                 default -> System.out.println("Opción no válida. Intente nuevamente.");
             }
@@ -45,6 +46,7 @@ public class Main {
         System.out.println("4. Consultar ciudades de destino únicas (HashSet)");
         System.out.println("5. Mostrar catálogo ordenado por peso (TreeSet)");
         System.out.println("6. Consultar próxima encomienda a despachar (PriorityQueue peek)");
+        System.out.println("7. Despachar siguiente encomienda prioritaria (PriorityQueue poll)");
         System.out.println("0. Salir");
     }
 
@@ -58,10 +60,12 @@ public class Main {
         }
 
         System.out.println("Total registradas: " + lista.size());
-        System.out.println("-----------------------------------------------------------------------------------------------------------------------");
+        System.out.println(
+                "-----------------------------------------------------------------------------------------------------------------------");
         System.out.printf("%-10s %-18s %-18s %-15s %-10s %-12s %-14s %-12s%n",
                 "Código", "Remitente", "Destinatario", "Destino", "Peso (kg)", "Servicio", "Prioridad", "Estado");
-        System.out.println("-----------------------------------------------------------------------------------------------------------------------");
+        System.out.println(
+                "-----------------------------------------------------------------------------------------------------------------------");
 
         for (Encomienda e : lista) {
             System.out.printf("%-10s %-18s %-18s %-15s %-10.2f %-12s %-14s %-12s%n",
@@ -74,12 +78,15 @@ public class Main {
                     e.getPrioridad().getDescripcion(),
                     e.getEstado().getDescripcion());
         }
-        System.out.println("-----------------------------------------------------------------------------------------------------------------------");
+        System.out.println(
+                "-----------------------------------------------------------------------------------------------------------------------");
     }
 
     private static String truncar(String texto, int longitudMaxima) {
-        if (texto == null) return "";
-        if (texto.length() <= longitudMaxima) return texto;
+        if (texto == null)
+            return "";
+        if (texto.length() <= longitudMaxima)
+            return texto;
         return texto.substring(0, longitudMaxima - 1) + ".";
     }
 
@@ -98,15 +105,18 @@ public class Main {
         if (encontrada != null) {
             System.out.println("\n>> ¡Encomienda localizada exitosamente!");
             System.out.println("  - Código:           " + encontrada.getCodigo());
-            System.out.println("  - Remitente:        " + encontrada.getRemitente().getNombre() + " (Doc: " + encontrada.getRemitente().getDocumento() + ")");
-            System.out.println("  - Destinatario:     " + encontrada.getDestinatario().getNombre() + " (Doc: " + encontrada.getDestinatario().getDocumento() + ")");
+            System.out.println("  - Remitente:        " + encontrada.getRemitente().getNombre() + " (Doc: "
+                    + encontrada.getRemitente().getDocumento() + ")");
+            System.out.println("  - Destinatario:     " + encontrada.getDestinatario().getNombre() + " (Doc: "
+                    + encontrada.getDestinatario().getDocumento() + ")");
             System.out.println("  - Ciudad Destino:   " + encontrada.getCiudadDestino());
             System.out.println("  - Peso:             " + String.format("%.2f kg", encontrada.getPeso()));
             System.out.println("  - Tipo de Servicio: " + encontrada.getTipoServicio());
             System.out.println("  - Nivel Prioridad:  " + encontrada.getPrioridad());
             System.out.println("  - Estado Actual:    " + encontrada.getEstado());
         } else {
-            System.out.println("\n>> [Resultado] No se encontró ninguna encomienda registrada con el código: " + codigo);
+            System.out
+                    .println("\n>> [Resultado] No se encontró ninguna encomienda registrada con el código: " + codigo);
         }
     }
 
@@ -138,10 +148,12 @@ public class Main {
         }
 
         System.out.println("Total de encomiendas ordenadas por peso: " + catalogo.size());
-        System.out.println("-----------------------------------------------------------------------------------------------------------------------");
+        System.out.println(
+                "-----------------------------------------------------------------------------------------------------------------------");
         System.out.printf("%-10s %-18s %-18s %-15s %-10s %-12s %-14s %-12s%n",
                 "Código", "Remitente", "Destinatario", "Destino", "Peso (kg)", "Servicio", "Prioridad", "Estado");
-        System.out.println("-----------------------------------------------------------------------------------------------------------------------");
+        System.out.println(
+                "-----------------------------------------------------------------------------------------------------------------------");
 
         for (Encomienda e : catalogo) {
             System.out.printf("%-10s %-18s %-18s %-15s %-10.2f %-12s %-14s %-12s%n",
@@ -154,7 +166,8 @@ public class Main {
                     e.getPrioridad().getDescripcion(),
                     e.getEstado().getDescripcion());
         }
-        System.out.println("-----------------------------------------------------------------------------------------------------------------------");
+        System.out.println(
+                "-----------------------------------------------------------------------------------------------------------------------");
     }
 
     private static void consultarProximoDespacho(GestionEncomiendasService service) {
@@ -168,14 +181,41 @@ public class Main {
 
         System.out.println(">> Encomienda en cabecera de prioridad:");
         System.out.println("  - Código:           " + proxima.getCodigo());
-        System.out.println("  - Remitente:        " + proxima.getRemitente().getNombre() + " (Doc: " + proxima.getRemitente().getDocumento() + ")");
-        System.out.println("  - Destinatario:     " + proxima.getDestinatario().getNombre() + " (Doc: " + proxima.getDestinatario().getDocumento() + ")");
+        System.out.println("  - Remitente:        " + proxima.getRemitente().getNombre() + " (Doc: "
+                + proxima.getRemitente().getDocumento() + ")");
+        System.out.println("  - Destinatario:     " + proxima.getDestinatario().getNombre() + " (Doc: "
+                + proxima.getDestinatario().getDocumento() + ")");
         System.out.println("  - Ciudad Destino:   " + proxima.getCiudadDestino());
         System.out.println("  - Peso:             " + String.format("%.2f kg", proxima.getPeso()));
         System.out.println("  - Tipo de Servicio: " + proxima.getTipoServicio());
-        System.out.println("  - Prioridad:        " + proxima.getPrioridad().getDescripcion() + " (Nivel " + proxima.getPrioridad().getNivel() + ")");
+        System.out.println("  - Prioridad:        " + proxima.getPrioridad().getDescripcion() + " (Nivel "
+                + proxima.getPrioridad().getNivel() + ")");
         System.out.println("  - Estado Actual:    " + proxima.getEstado().getDescripcion());
         System.out.println("  - Total en cola:    " + service.getCantidadPendientesDespacho());
+    }
+
+    private static void despacharSiguienteEncomienda(GestionEncomiendasService service) {
+        System.out.println("\n--- DESPACHO DE ENCOMIENDA PRIORITARIA (PriorityQueue poll) ---");
+        Encomienda despachada = service.despacharSiguiente();
+
+        if (despachada == null) {
+            System.out.println("No hay encomiendas pendientes de despacho en la cola.");
+            return;
+        }
+
+        System.out.println(">> ¡Encomienda despachada con éxito!");
+        System.out.println("  - Código:            " + despachada.getCodigo());
+        System.out.println("  - Remitente:         " + despachada.getRemitente().getNombre() + " (Doc: "
+                + despachada.getRemitente().getDocumento() + ")");
+        System.out.println("  - Destinatario:      " + despachada.getDestinatario().getNombre() + " (Doc: "
+                + despachada.getDestinatario().getDocumento() + ")");
+        System.out.println("  - Ciudad Destino:    " + despachada.getCiudadDestino());
+        System.out.println("  - Peso:              " + String.format("%.2f kg", despachada.getPeso()));
+        System.out.println("  - Tipo de Servicio:  " + despachada.getTipoServicio());
+        System.out.println("  - Prioridad:         " + despachada.getPrioridad().getDescripcion() + " (Nivel "
+                + despachada.getPrioridad().getNivel() + ")");
+        System.out.println("  - Nuevo Estado:      " + despachada.getEstado().getDescripcion());
+        System.out.println("  - Restantes en cola: " + service.getCantidadPendientesDespacho());
     }
 
     private static void registrarNuevaEncomienda(Scanner scanner, GestionEncomiendasService service) {
@@ -189,7 +229,8 @@ public class Main {
         }
 
         if (service.existeCodigo(codigo)) {
-            System.out.println("Error: Ya existe una encomienda con el código " + codigo + " (Control de unicidad mediante Map/Set).");
+            System.out.println("Error: Ya existe una encomienda con el código " + codigo
+                    + " (Control de unicidad mediante Map/Set).");
             return;
         }
 
@@ -235,7 +276,8 @@ public class Main {
         Cliente remitente = new Cliente(docRemitente, nomRemitente, telRemitente, ciuRemitente);
         Cliente destinatario = new Cliente(docDestinatario, nomDestinatario, telDestinatario, ciuDestinatario);
 
-        Encomienda nueva = new Encomienda(codigo, remitente, destinatario, ciuDestinatario, peso, tipoServicio, prioridad);
+        Encomienda nueva = new Encomienda(codigo, remitente, destinatario, ciuDestinatario, peso, tipoServicio,
+                prioridad);
         boolean registrado = service.registrarEncomienda(nueva);
 
         if (registrado) {
