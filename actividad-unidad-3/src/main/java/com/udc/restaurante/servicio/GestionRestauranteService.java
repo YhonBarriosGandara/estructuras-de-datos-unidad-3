@@ -134,4 +134,20 @@ public class GestionRestauranteService {
     public Pila getHistorialProcesados() {
         return historialProcesados;
     }
+
+    public void cargarDatosIniciales() {
+        // Precarga de 8 pedidos iniciales para demostracion inmediata en consola
+        registrarPedido(new Pedido("PED-101", "Mesa 1 - Juan Perez", "Hamburguesa Doble Carne + Papas Francesas", 32000.0));
+        registrarPedido(new Pedido("PED-102", "Mesa 4 - Carolina Diaz", "Pizza Mediana Pepperoni + Gaseosa 1.5L", 45000.0));
+        registrarPedido(new Pedido("PED-103", "Para Llevar - Andres Mejia", "Bandeja Paisa Tradicional + Mazamorra", 38000.0));
+        registrarPedido(new Pedido("PED-104", "Mesa 2 - Valentina Rios", "Pechuga Gratinada + Ensalada Cesar", 29000.0));
+        registrarPedido(new Pedido("PED-105", "Mesa 6 - Roberto Gomez", "Churrasco 400g + Papas al Vapor", 52000.0));
+        registrarPedido(new Pedido("PED-106", "Domicilio #12 - Sara Lopez", "Costillas BBQ + Aros de Cebolla", 48000.0));
+        registrarPedido(new Pedido("PED-107", "Mesa 8 - Familia Torres", "Picada Mixta Familiar (4 Personas)", 85000.0));
+        registrarPedido(new Pedido("PED-108", "Para Llevar - David Morales", "Sushi Roll Especial 15 Piezas", 41000.0));
+
+        // Procesar inicialmente los primeros dos pedidos para que la pila no arranque vacia
+        procesarSiguientePedido();
+        procesarSiguientePedido();
+    }
 }
