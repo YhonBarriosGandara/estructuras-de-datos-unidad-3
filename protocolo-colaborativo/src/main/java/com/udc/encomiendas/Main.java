@@ -30,6 +30,7 @@ public class Main {
                 case 6 -> consultarProximoDespacho(service);
                 case 7 -> despacharSiguienteEncomienda(service);
                 case 8 -> modificarDestinoEncomienda(scanner, service);
+                case 9 -> cancelarOEliminarEncomienda(scanner, service);
                 case 0 -> System.out.println("\nSaliendo del sistema de gestión de encomiendas...");
                 default -> System.out.println("Opción no válida. Intente nuevamente.");
             }
@@ -49,6 +50,7 @@ public class Main {
         System.out.println("6. Consultar próxima encomienda a despachar (PriorityQueue peek)");
         System.out.println("7. Despachar siguiente encomienda prioritaria (PriorityQueue poll)");
         System.out.println("8. Modificar ciudad de destino (Actualización Set)");
+        System.out.println("9. Cancelar o eliminar encomienda (Sincronización)");
         System.out.println("0. Salir");
     }
 
@@ -247,6 +249,43 @@ public class Main {
             System.out.println("   (Colección HashSet de cobertura sincronizada automáticamente)");
         } else {
             System.out.println("Error: No se pudo actualizar el destino.");
+        }
+    }
+
+    private static void cancelarOEliminarEncomienda(Scanner scanner, GestionEncomiendasService service) {
+        System.out.println("\n--- GESTIÓN DE CANCELACIÓN / ELIMINACIÓN DE ENCOMIENDA ---");
+        System.out.print("Ingrese código de encomienda: ");
+        String codigo = scanner.nextLine().trim();
+
+        Encomienda encomienda = service.buscarPorCodigo(codigo);
+        if (encomienda == null) {
+            System.out.println("Error: No se encontró encomienda registrada con el código: " + codigo);
+            return;
+        }
+
+        System.out.println(">> Encomienda: " + encomienda.getCodigo() + " | Destino: " + encomienda.getCiudadDestino()
+                + " | Estado actual: " + encomienda.getEstado().getDescripcion());
+        System.out.println("  1. Cancelar encomienda (Pasa a CANCELADA, se retira de cola y catálogo de peso)");
+        System.out.println("  2. Eliminar definitivamente (Se borra de todas las colecciones)");
+        int subOpcion = leerEntero(scanner, "Seleccione acción (1 o 2, otro número para cancelar): ");
+
+        if (subOpcion == 1) {
+            boolean ok = service.cancelarEncomienda(codigo);
+            if (ok) {
+                System.out.println(">> ¡Encomienda " + codigo + " CANCELADA con éxito!");
+                System.out.println("   (Retirada de PriorityQueue y TreeSet, conservada en histórico ArrayList y HashMap)");
+            } else {
+                System.out.println("Error: No se pudo cancelar la encomienda.");
+            }
+        } else if (subOpcion == 2) {
+            boolean ok = service.eliminarDefinitivamente(codigo);
+            if (ok) {
+                System.out.println(">> ¡Encomienda " + codigo + " ELIMINADA DEFINITIVAMENTE de todas las colecciones!");
+            } else {
+                System.out.println("Error: No se pudo eliminar la encomienda.");
+            }
+        } else {
+            System.out.println("Operación descartada por el usuario.");
         }
     }
 
