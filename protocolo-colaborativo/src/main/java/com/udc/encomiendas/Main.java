@@ -23,6 +23,7 @@ public class Main {
             switch (opcion) {
                 case 1 -> registrarNuevaEncomienda(scanner, service);
                 case 2 -> consultarTodasLasEncomiendas(service);
+                case 3 -> buscarEncomiendaPorCodigo(scanner, service);
                 case 0 -> System.out.println("\nSaliendo del sistema de gestión de encomiendas...");
                 default -> System.out.println("Opción no válida. Intente nuevamente.");
             }
@@ -36,6 +37,7 @@ public class Main {
         System.out.println("=======================================================");
         System.out.println("1. Registrar nueva encomienda");
         System.out.println("2. Consultar todas las encomiendas (Catálogo general)");
+        System.out.println("3. Buscar encomienda por código (Búsqueda directa Map)");
         System.out.println("0. Salir");
     }
 
@@ -72,6 +74,33 @@ public class Main {
         if (texto == null) return "";
         if (texto.length() <= longitudMaxima) return texto;
         return texto.substring(0, longitudMaxima - 1) + ".";
+    }
+
+    private static void buscarEncomiendaPorCodigo(Scanner scanner, GestionEncomiendasService service) {
+        System.out.println("\n--- BÚSQUEDA DE ENCOMIENDA POR CÓDIGO (HashMap O(1)) ---");
+        System.out.print("Ingrese código de rastreo a buscar: ");
+        String codigo = scanner.nextLine().trim();
+
+        if (codigo.isEmpty()) {
+            System.out.println("Error: Debe ingresar un código válido.");
+            return;
+        }
+
+        Encomienda encontrada = service.buscarPorCodigo(codigo);
+
+        if (encontrada != null) {
+            System.out.println("\n>> ¡Encomienda localizada exitosamente!");
+            System.out.println("  - Código:           " + encontrada.getCodigo());
+            System.out.println("  - Remitente:        " + encontrada.getRemitente().getNombre() + " (Doc: " + encontrada.getRemitente().getDocumento() + ")");
+            System.out.println("  - Destinatario:     " + encontrada.getDestinatario().getNombre() + " (Doc: " + encontrada.getDestinatario().getDocumento() + ")");
+            System.out.println("  - Ciudad Destino:   " + encontrada.getCiudadDestino());
+            System.out.println("  - Peso:             " + String.format("%.2f kg", encontrada.getPeso()));
+            System.out.println("  - Tipo de Servicio: " + encontrada.getTipoServicio());
+            System.out.println("  - Nivel Prioridad:  " + encontrada.getPrioridad());
+            System.out.println("  - Estado Actual:    " + encontrada.getEstado());
+        } else {
+            System.out.println("\n>> [Resultado] No se encontró ninguna encomienda registrada con el código: " + codigo);
+        }
     }
 
     private static void registrarNuevaEncomienda(Scanner scanner, GestionEncomiendasService service) {
