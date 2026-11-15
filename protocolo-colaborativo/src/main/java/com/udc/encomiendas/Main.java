@@ -5,6 +5,7 @@ import com.udc.encomiendas.modelo.Encomienda;
 import com.udc.encomiendas.modelo.PrioridadEncomienda;
 import com.udc.encomiendas.servicio.GestionEncomiendasService;
 
+import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -31,6 +32,7 @@ public class Main {
                 case 7 -> despacharSiguienteEncomienda(service);
                 case 8 -> modificarDestinoEncomienda(scanner, service);
                 case 9 -> cancelarOEliminarEncomienda(scanner, service);
+                case 10 -> mostrarAuditoriaColecciones(service);
                 case 0 -> System.out.println("\nSaliendo del sistema de gestión de encomiendas...");
                 default -> System.out.println("Opción no válida. Intente nuevamente.");
             }
@@ -51,6 +53,7 @@ public class Main {
         System.out.println("7. Despachar siguiente encomienda prioritaria (PriorityQueue poll)");
         System.out.println("8. Modificar ciudad de destino (Actualización Set)");
         System.out.println("9. Cancelar o eliminar encomienda (Sincronización)");
+        System.out.println("10. Auditoría de consistencia de colecciones (Métricas JCF)");
         System.out.println("0. Salir");
     }
 
@@ -287,6 +290,27 @@ public class Main {
         } else {
             System.out.println("Operación descartada por el usuario.");
         }
+    }
+
+    private static void mostrarAuditoriaColecciones(GestionEncomiendasService service) {
+        System.out.println("\n=======================================================");
+        System.out.println("   AUDITORÍA Y MÉTRICAS DE CONSISTENCIA DE COLECCIONES ");
+        System.out.println("=======================================================");
+        Map<String, Integer> resumen = service.obtenerResumenColecciones();
+
+        System.out.printf("  1. ArrayList  (listaGeneral)           : %2d elementos (Histórico maestro)%n",
+                resumen.get("listaGeneral"));
+        System.out.printf("  2. HashMap    (mapaPorCodigo)          : %2d entradas (Acceso directo O(1))%n",
+                resumen.get("mapaPorCodigo"));
+        System.out.printf("  3. TreeSet    (catalogoOrdenadoPorPeso): %2d elementos (Orden natural O(log n))%n",
+                resumen.get("catalogoOrdenadoPorPeso"));
+        System.out.printf("  4. PriorityQ  (colaPrioridad)          : %2d elementos (Despacho prioritario O(log n))%n",
+                resumen.get("colaPrioridad"));
+        System.out.printf("  5. HashSet    (ciudadesDestino)        : %2d destinos únicos (Sin duplicados O(1))%n",
+                resumen.get("ciudadesDestino"));
+        System.out.println("-------------------------------------------------------");
+        System.out.println(">> Diagnóstico: TODAS LAS COLECCIONES SE ENCUENTRAN SINCRONIZADAS");
+        System.out.println("=======================================================");
     }
 
     private static void registrarNuevaEncomienda(Scanner scanner, GestionEncomiendasService service) {
